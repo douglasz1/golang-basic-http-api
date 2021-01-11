@@ -9,7 +9,8 @@ import (
 
 // Item is a struct that groups all necessary fields into a single unit
 type Item struct {
-	data string
+	Data      string `json:"data"`
+	OtherData int    `json:"otherData"`
 }
 
 var data []Item = []Item{}
