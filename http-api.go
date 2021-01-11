@@ -14,7 +14,7 @@ func main() {
 
 	router.HandleFunc("/test", test)
 
-	router.HandleFunc("/add/{item}", addItem).Methods("GET", "DELETE")
+	router.HandleFunc("/add/{item}", addItem).Methods("POST")
 
 	http.ListenAndServe(":5000", router)
 }
