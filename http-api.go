@@ -33,6 +33,8 @@ func main() {
 
 	router.HandleFunc("/posts/{id}", getPost).Methods("GET")
 
+	router.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
+
 	http.ListenAndServe(":5000", router)
 }
 
@@ -49,7 +51,13 @@ func getPost(w http.ResponseWriter, r *http.Request) {
 
 	// error checking
 	if id >= len(posts) {
+		w.WriteHeader(404)
+		w.Write([]byte("No post found with specified ID"))
 	}
+	post := posts[id]
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(post)
 }
 
 func getAllPosts(w http.ResponseWriter, r *http.Request) {
@@ -66,4 +74,22 @@ func addItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(posts)
+}
+
+func updatePost(w http.ResponseWriter, r *http.Request) {
+	// get the ID of the post from the route parameters
+	var idParam string = mux.Vars(r)["id"]
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		w.WriteHeader(400)
+		w.Write([]byte("ID could not be converted to integer"))
+		return
+	}
+
+	// error checking
+	if id >= len(posts) {
+		w.WriteHeader(400)
+		w.Write([]byte("No post found with specified ID"))
+		return
+	}
 }
