@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -30,7 +31,25 @@ func main() {
 
 	router.HandleFunc("/posts", getAllPosts).Methods("GET")
 
+	router.HandleFunc("/posts/{id}", getPost).Methods("GET")
+
 	http.ListenAndServe(":5000", router)
+}
+
+func getPost(w http.ResponseWriter, r *http.Request) {
+	// get the ID of the post from the route parameter
+	var idParam string = mux.Vars(r)["id"]
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		// there was an error
+		w.WriteHeader(400)
+		w.Write([]byte("ID could not be converted to integer"))
+		return
+	}
+
+	// error checking
+	if id >= len(posts) {
+	}
 }
 
 func getAllPosts(w http.ResponseWriter, r *http.Request) {
