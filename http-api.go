@@ -14,7 +14,7 @@ func main() {
 
 	router.HandleFunc("/test", test)
 
-	router.HandleFunc("/add/{data}", addItem)
+	router.HandleFunc("/add/{item}", addItem).Methods("GET", "DELETE")
 
 	http.ListenAndServe(":5000", router)
 }
@@ -26,7 +26,11 @@ func test(w http.ResponseWriter, r *http.Request) {
 	}{ID: "555"})
 }
 
-fun addItem(w http.ResponseWriter, r *http.Request) {
-	routeVariable := mux.Vars(r)["data"]
+func addItem(w http.ResponseWriter, r *http.Request) {
+	routeVariable := mux.Vars(r)["item"]
 	data = append(data, routeVariable)
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(data)
 }
