@@ -26,16 +26,22 @@ var posts []Post = []Post{}
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/add", addItem).Methods("POST")
+	router.HandleFunc("/posts", addItem).Methods("POST")
+
+	router.HandleFunc("/posts", getAllPosts).Methods("GET")
 
 	http.ListenAndServe(":5000", router)
+}
+
+func getAllPosts(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(posts)
 }
 
 func addItem(w http.ResponseWriter, r *http.Request) {
 	// get Item value from the JSON body
 	var newPost Post
 	json.NewDecoder(r.Body).Decode(&newPost)
-
 	posts = append(posts, newPost)
 
 	w.Header().Set("Content-Type", "application/json")
