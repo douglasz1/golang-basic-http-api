@@ -6,6 +6,12 @@
 *.exe
 *.o
 *.so
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
 
 # Packages #
 ############
