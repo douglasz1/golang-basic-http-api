@@ -92,4 +92,13 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("No post found with specified ID"))
 		return
 	}
+
+	// get the value from JSON body
+	var updatePost Post
+	json.NewDecoder(r.Body).Decode(&updatePost)
+
+	posts[id] = updatePost
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(updatePost)
 }
