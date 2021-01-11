@@ -7,13 +7,21 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Item is a struct that groups all necessary fields into a single unit
-type Item struct {
-	Data      string `json:"data"`
-	OtherData int    `json:"otherData"`
+// User is a struct that represents a user in our application
+type User struct {
+	FullName string `json:"fullname"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
 }
 
-var data []Item = []Item{}
+// Post is a struct that represents a single post
+type Post struct {
+	Title  string `json:"title"`
+	Body   string `json:"body"`
+	Author User   `json:"author"`
+}
+
+var posts []Post = []Post{}
 
 func main() {
 	router := mux.NewRouter()
@@ -25,12 +33,12 @@ func main() {
 
 func addItem(w http.ResponseWriter, r *http.Request) {
 	// get Item value from the JSON body
-	var newItem Item
-	json.NewDecoder(r.Body).Decode(&newItem)
+	var newPost Post
+	json.NewDecoder(r.Body).Decode(&newPost)
 
-	data = append(data, newItem)
+	posts = append(posts, newPost)
 
 	w.Header().Set("Content-Type", "application/json")
 
-	json.NewEncoder(w).Encode(data)
+	json.NewEncoder(w).Encode(posts)
 }
