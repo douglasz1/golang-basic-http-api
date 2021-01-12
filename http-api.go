@@ -10,7 +10,7 @@ import (
 
 // User is a struct that represents a user in our application
 type User struct {
-	FullName string `json:"fullname"`
+	FullName string `json:"fullName"`
 	Username string `json:"username"`
 	Email    string `json:"email"`
 }
@@ -59,6 +59,7 @@ func getPost(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("No post found with specified ID"))
 		return
 	}
+
 	post := posts[id]
 
 	w.Header().Set("Content-Type", "application/json")
@@ -74,6 +75,7 @@ func addItem(w http.ResponseWriter, r *http.Request) {
 	// get Item value from the JSON body
 	var newPost Post
 	json.NewDecoder(r.Body).Decode(&newPost)
+
 	posts = append(posts, newPost)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -93,19 +95,19 @@ func updatePost(w http.ResponseWriter, r *http.Request) {
 
 	// error checking
 	if id >= len(posts) {
-		w.WriteHeader(400)
+		w.WriteHeader(404)
 		w.Write([]byte("No post found with specified ID"))
 		return
 	}
 
 	// get the value from JSON body
-	var updatePost Post
-	json.NewDecoder(r.Body).Decode(&updatePost)
+	var updatedPost Post
+	json.NewDecoder(r.Body).Decode(&updatedPost)
 
-	posts[id] = updatePost
+	posts[id] = updatedPost
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(updatePost)
+	json.NewEncoder(w).Encode(updatedPost)
 }
 
 func patchPost(w http.ResponseWriter, r *http.Request) {
@@ -120,7 +122,7 @@ func patchPost(w http.ResponseWriter, r *http.Request) {
 
 	// error checking
 	if id >= len(posts) {
-		w.WriteHeader(400)
+		w.WriteHeader(404)
 		w.Write([]byte("No post found with specified ID"))
 		return
 	}
@@ -131,7 +133,6 @@ func patchPost(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(post)
-
 }
 
 func deletePost(w http.ResponseWriter, r *http.Request) {
@@ -146,7 +147,7 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 
 	// error checking
 	if id >= len(posts) {
-		w.WriteHeader(400)
+		w.WriteHeader(404)
 		w.Write([]byte("No post found with specified ID"))
 		return
 	}
@@ -156,5 +157,4 @@ func deletePost(w http.ResponseWriter, r *http.Request) {
 	posts = append(posts[:id], posts[id+1:]...)
 
 	w.WriteHeader(200)
-
 }
