@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// User is a struct that represents a user in our application
+// User is a struct that represents a user in our application!
 type User struct {
 	FullName string `json:"fullName"`
 	Username string `json:"username"`
